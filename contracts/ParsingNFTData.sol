@@ -4,10 +4,7 @@ pragma solidity ^0.8.17;
 import "./IParsingNFTData.sol";
 
 contract ParsingNFTData is IParsingNFTData {
-    function getERC721HolderList(
-        IERC721 nft,
-        uint256[] calldata 
-    ) external view returns (address[] memory holders) {
+    function getERC721HolderList(IERC721 nft, uint256[] calldata) external view returns (address[] memory holders) {
         bytes4 selector = IERC721.ownerOf.selector;
         assembly {
             let len := calldataload(68)
@@ -31,11 +28,23 @@ contract ParsingNFTData is IParsingNFTData {
 
     function getERC1155BalanceList(
         IERC1155 erc1155,
-        address[] calldata holders,
-        uint256[] calldata tokenIds
-    ) external view returns (uint256[] memory balances) {
+        address[][] calldata holders,
+        uint256[][] calldata tokenIds
+    ) external view returns (uint256[][] memory balances) {
         uint256 length = holders.length;
-        balances = new uint256[](length);
-        balances = erc1155.balanceOfBatch(holders, tokenIds);
+        require(tokenIds.length == length, "LENGTH_NOT_EQUAL");
+        balances = new uint256[][](length);
+        for (uint256 i; i < length; ) {
+            balances[i] = new uint256[](holders[i].length);
+            for (uint256 j; j < length; ) {
+                balances[i] = erc1155.balanceOfBatch(holders[i], tokenIds[i]);
+                unchecked {
+                    j++;
+                }
+            }
+            unchecked {
+                i++;
+            }
+        }
     }
 }

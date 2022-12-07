@@ -12,7 +12,7 @@ interface IParsingNFTData {
 
     function getERC1155BalanceList(
         IERC1155 erc1155,
-        address[] calldata holders,
-        uint256[] calldata tokenIds
-    ) external view returns (uint256[] memory balances);
+        address[][] calldata holders,
+        uint256[][] calldata tokenIds
+    ) external view returns (uint256[][] memory balances);
 }
