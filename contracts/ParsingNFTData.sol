@@ -6,6 +6,7 @@ import "./IParsingNFTData.sol";
 contract ParsingNFTData is IParsingNFTData {
     function getERC721HolderList(IERC721 nft, uint256[] calldata) external view returns (address[] memory holders) {
         bytes4 selector = IERC721.ownerOf.selector;
+        /// @solidity memory-safe-assembly
         assembly {
             let len := calldataload(68)
             holders := mload(0x40)
@@ -28,6 +29,7 @@ contract ParsingNFTData is IParsingNFTData {
 
     function getERC721BalanceList(IERC721 nft, address[] calldata) external view returns (uint256[] memory balances) {
         bytes4 selector = IERC721.balanceOf.selector;
+        /// @solidity memory-safe-assembly
         assembly {
             let len := calldataload(68)
             balances := mload(0x40)
