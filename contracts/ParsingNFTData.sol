@@ -26,6 +26,28 @@ contract ParsingNFTData is IParsingNFTData {
         }
     }
 
+    function getERC721BalanceList(IERC721 nft, address[] calldata) external view returns (uint256[] memory balances) {
+        bytes4 selector = IERC721.balanceOf.selector;
+        assembly {
+            let len := calldataload(68)
+            balances := mload(0x40)
+            mstore(balances, len)
+            let totalbytes := mul(len, 0x20)
+            mstore(0x40, add(add(balances, 0x20), totalbytes))
+            let end := add(totalbytes, 0x20)
+
+            // prettier-ignore
+            for { let i := 0x20 } lt(i, end) { i := add(i, 0x20) } {
+                mstore(0, selector)
+                calldatacopy(4, add(0x44, i), 0x20)
+
+                if staticcall(gas(), nft, 0, 0x24, 0, 0x20) {
+                    mstore(add(balances, i), mload(0))
+                }
+            }
+        }
+    }
+
     function getERC1155BalanceList(
         IERC1155 erc1155,
         address[][] calldata holders,
