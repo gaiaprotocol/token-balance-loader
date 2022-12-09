@@ -59,12 +59,7 @@ contract ParsingNFTData is IParsingNFTData {
         require(tokenIds.length == length, "LENGTH_NOT_EQUAL");
         balances = new uint256[][](length);
         for (uint256 i; i < length; ) {
-            for (uint256 j; j < length; ) {
-                balances[i] = erc1155.balanceOfBatch(holders[i], tokenIds[i]);
-                unchecked {
-                    j++;
-                }
-            }
+            balances[i] = erc1155.balanceOfBatch(holders[i], tokenIds[i]);
             unchecked {
                 i++;
             }
