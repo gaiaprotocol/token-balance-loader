@@ -3,6 +3,9 @@
 ## Mainnet
 - [0x06f98E2E91E64103d612243a151750d14e5EDacC](https://etherscan.io/address/0x06f98E2E91E64103d612243a151750d14e5EDacC)
 
+## Klaytn
+- 0x8A98A038dcA75091225EE0a1A11fC20Aa23832A0
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This contract is a collection of functions that parse ERC721 and ERC1155 holder and balance data.  
