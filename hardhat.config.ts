@@ -3,6 +3,7 @@ import "@nomicfoundation/hardhat-toolbox";
 import "@nomicfoundation/hardhat-chai-matchers";
 import "@nomiclabs/hardhat-solhint";
 import "hardhat-tracer";
+require("@nomiclabs/hardhat-truffle5");
 
 import { HardhatUserConfig } from "hardhat/types";
 
@@ -36,7 +37,7 @@ const config: HardhatUserConfig = {
             chainId: 1,
         },
         polygon: {
-            url: `https://polygon-mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
+            url: `https://polygon-rpc.com/`,
             accounts,
             chainId: 137,
         },
@@ -45,6 +46,16 @@ const config: HardhatUserConfig = {
             accounts,
             chainId: 8217,
             gasPrice: 250000000000,
+        },
+        bnb: {
+            url: `https://bsc-dataseed.binance.org/`,
+            accounts,
+            chainId: 56,
+        },
+        goerli: {
+            url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`,
+            accounts,
+            chainId: 5,
         },
         mumbai: {
             url: `https://polygon-mumbai.infura.io/v3/${process.env.INFURA_API_KEY}`,
@@ -60,6 +71,11 @@ const config: HardhatUserConfig = {
             url: "https://dataseed.popcateum.org",
             accounts,
             chainId: 1213,
+        },
+        bifrost: {
+            url: "https://public-01.mainnet.thebifrost.io/rpc",
+            accounts,
+            chainId: 3068,
         },
     },
     etherscan: {
