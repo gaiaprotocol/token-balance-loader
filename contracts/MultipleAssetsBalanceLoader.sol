@@ -13,29 +13,25 @@ contract MultipleAssetsBalanceLoader {
         address[] calldata erc1155s,
         uint256[][] calldata erc1155TokenIds
     ) external view returns (uint256[] memory balances) {
-        uint256 erc20Length = erc20s.length;
-        uint256 erc721Length = erc721s.length;
-        uint256 erc1155Length = erc1155s.length;
-        require(erc1155Length == erc1155TokenIds.length, "Mismatch in ERC1155 addresses and token IDs array lengths.");
+        require(erc1155s.length == erc1155TokenIds.length, "Mismatch in ERC1155 addresses and token IDs array lengths.");
 
-        balances = new uint256[](erc20Length + erc721Length + erc1155Length);
-        uint256 k = 0;
-        for (uint256 i = 0; i < erc20Length; i += 1) {
-            balances[k] = ERC20(erc20s[i]).balanceOf(owner);
-            k += 1;
+        balances = new uint256[](erc20s.length + erc721s.length + erc1155s.length);
+
+        for (uint256 i = 0; i < erc20s.length; i++) {
+            balances[i] = ERC20(erc20s[i]).balanceOf(owner);
         }
-        for (uint256 i = 0; i < erc721Length; i += 1) {
-            balances[k] = ERC721(erc721s[i]).balanceOf(owner);
-            k += 1;
+
+        for (uint256 i = 0; i < erc721s.length; i++) {
+            balances[i + erc20s.length] = ERC721(erc721s[i]).balanceOf(owner);
         }
-        for (uint256 i = 0; i < erc1155Length; i += 1) {
+
+        for (uint256 i = 0; i < erc1155s.length; i++) {
             ERC1155 erc1155 = ERC1155(erc1155s[i]);
-            uint256[] memory tokenIds = erc1155TokenIds[i];
-            uint256 tokenIdLength = tokenIds.length;
-            for (uint256 j = 0; j < tokenIdLength; j += 1) {
-                balances[k] += erc1155.balanceOf(owner, tokenIds[j]);
+            uint256 balance = 0;
+            for (uint256 j = 0; j < erc1155TokenIds[i].length; j++) {
+                balance += erc1155.balanceOf(owner, erc1155TokenIds[i][j]);
             }
-            k += 1;
+            balances[i + erc20s.length + erc721s.length] = balance;
         }
     }
 }
