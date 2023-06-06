@@ -12,10 +12,12 @@ contract MultipleAssetsBalanceLoader {
         address[] calldata erc721s,
         address[] calldata erc1155s,
         uint256[][] calldata erc1155TokenIds
-    ) internal view returns (uint256[] memory balances) {
+    ) external view returns (uint256[] memory balances) {
         uint256 erc20Length = erc20s.length;
         uint256 erc721Length = erc721s.length;
         uint256 erc1155Length = erc1155s.length;
+        require(erc1155Length == erc1155TokenIds.length, "Mismatch in ERC1155 addresses and token IDs array lengths.");
+
         balances = new uint256[](erc20Length + erc721Length + erc1155Length);
         uint256 k = 0;
         for (uint256 i = 0; i < erc20Length; i += 1) {
